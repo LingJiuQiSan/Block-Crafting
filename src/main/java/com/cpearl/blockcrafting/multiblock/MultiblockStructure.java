@@ -1,5 +1,6 @@
 package com.cpearl.blockcrafting.multiblock;
 
+import com.cpearl.blockcrafting.BlockCraftingConfig;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -282,12 +283,21 @@ public class MultiblockStructure {
                 for (int j = 0; j < layer.size(); j++) {
                     var line = layer.get(j);
                     for (int k = 0; k < line.length(); k++) {
-                        var pos = new Vec3i(i, j, -k);
-                        var ch = line.charAt(k);
-                        var block = dict.get(ch);
-                        if (ch == center)
-                            centerPos = new Vec3i(i, j, -k);
-                        blocks.add(new Tuple<>(pos, block));
+                        if (BlockCraftingConfig.GENERAL.enableGTBuildMode.get()) {
+                            var pos = new Vec3i(i, j, -k);
+                            var ch = line.charAt(k);
+                            var block = dict.get(ch);
+                            if (ch == center)
+                                centerPos = new Vec3i(i, j, -k);
+                            blocks.add(new Tuple<>(pos, block));
+                        } else {
+                            var pos = new Vec3i(j, i, -k);
+                            var ch = line.charAt(k);
+                            var block = dict.get(ch);
+                            if (ch == center)
+                                centerPos = new Vec3i(j, i, -k);
+                            blocks.add(new Tuple<>(pos, block));
+                        }
                     }
                 }
             }
